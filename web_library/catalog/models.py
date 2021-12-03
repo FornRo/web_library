@@ -7,8 +7,8 @@ import uuid
 class Author(models.Model):
     first_name = models.CharField(max_length=120)
     last_name = models.CharField(max_length=120)
-    data_of_birth = models.DateField(null=True, blank=True)
-    data_of_death = models.DateField('Died', null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_death = models.DateField('Died', null=True, blank=True)
 
     class Meta:
         ordering = ['first_name', 'last_name']
@@ -59,7 +59,7 @@ class BookInstance(models.Model):
         ordering = ["due_back"]
 
     def __str__(self):
-        return f'{self.id} ({self.book.title})'
+        return f'{self.book.title} ({self.id})'
 
 
 class Book(models.Model):
@@ -84,4 +84,12 @@ class Book(models.Model):
 
     def get_absolute_url(self):
         return reverse('book-detail', args=[str(self.id)])
+
+    def display_genre(self):
+        """
+        Creates a string for the Genre. This is required to display genre in Admin.
+        """
+        return ', '.join([genre.name for genre in self.genre.all()[:3]])
+
+    display_genre.short_description = 'Genre'
 
