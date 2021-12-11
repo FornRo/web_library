@@ -24,3 +24,24 @@ def index(request):
                  'num_instances_available': num_instances_available, 'num_authors': num_authors,
                  'num_visits': num_visits},
     )
+
+# ________________________________________________________________________
+
+
+from django.views import generic
+
+
+class BookListView(generic.ListView):
+    model = models.Book
+    # paginate_by = 4
+    template_name = 'catalog/book_list.html'
+
+
+class BookDetailView(generic.DetailView):
+    model = models.Book
+    # queryset = model.objects.all().filter(id=pk)
+
+
+class AuthorDetailView(generic.DetailView):
+    model = models.Author
+
