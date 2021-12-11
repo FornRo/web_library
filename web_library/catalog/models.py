@@ -17,7 +17,7 @@ class Author(models.Model):
         return f'{self.first_name}, {self.last_name}'
 
     def get_absolute_url(self):
-        return reverse('author-detail', args=[str(self.id)])
+        return reverse('catalog:author-detail', args=[str(self.id)])
 
 
 class Genre(models.Model):
@@ -83,7 +83,7 @@ class Book(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('book-detail', args=[str(self.id)])
+        return reverse('catalog:book-detail', args=[str(self.id)])
 
     def display_genre(self):
         """
