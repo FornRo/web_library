@@ -42,6 +42,11 @@ class BookDetailView(generic.DetailView):
     # queryset = model.objects.all().filter(id=pk)
 
 
+class AuthorListView(generic.ListView):
+    model = models.Author
+    template_name = 'catalog/author_list.html'
+
+
 class AuthorDetailView(generic.DetailView):
     model = models.Author
 
