@@ -59,6 +59,7 @@ class LoanedBooksByUserListView(PermissionRequiredMixin, generic.ListView):
     Generic class-based view listing books on loan to current user.
     """
     model = models.BookInstance
+    permission_required = 'catalog.can_mark_returned'
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
 
