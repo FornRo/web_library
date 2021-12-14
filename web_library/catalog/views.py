@@ -114,7 +114,6 @@ def renew_book_librarian(request, pk):
 
 from django.views.generic import edit
 from django.urls import reverse_lazy
-from .models import Author
 
 
 class AuthorCreate(PermissionRequiredMixin, edit.CreateView):
