@@ -51,10 +51,10 @@ class AuthorDetailView(generic.DetailView):
     model = models.Author
 
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
-class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+class LoanedBooksByUserListView(PermissionRequiredMixin, generic.ListView):
     """
     Generic class-based view listing books on loan to current user.
     """
@@ -111,22 +111,22 @@ def renew_book_librarian(request, pk):
 # ________________________________________________________________________
 
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import edit
 from django.urls import reverse_lazy
 from .models import Author
 
 
-class AuthorCreate(CreateView):
-    model = Author
+class AuthorCreate(PermissionRequiredMixin, edit.CreateView):
+    model = models.Author
     fields = '__all__'
     initial = {'date_of_death': '01/01/2021', }
 
 
-class AuthorUpdate(UpdateView):
-    model = Author
+class AuthorUpdate(PermissionRequiredMixin, edit.UpdateView):
+    model = models.Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
 
 
-class AuthorDelete(DeleteView):
-    model = Author
+class AuthorDelete(PermissionRequiredMixin, edit.DeleteView):
+    model = models.Author
     success_url = reverse_lazy('authors')
