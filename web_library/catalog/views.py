@@ -93,7 +93,6 @@ class RenewBookLibrarian(PermissionRequiredMixin, edit.UpdateView):
 # ________________________________________________________________________
 
 
-from django.views.generic import edit
 from django.urls import reverse_lazy
 
 
