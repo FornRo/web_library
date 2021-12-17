@@ -12,7 +12,13 @@
       <a href="{{ author.get_absolute_url }}">
       {{ author }} ({{author.date_of_birth}} - {% if author.date_of_death %}{{author.date_of_death}}{% endif %})
       </a>
-    </li>
+      {% if user.is_authenticated and perms.catalog.cahange_author %}
+        <a class="" href="{% url 'catalog:author_update' author.pk %}"><img src="https://img.icons8.com/material-outlined/24/000000/approve-and-update.png"/></a>
+    {% endif %}
+    {% if user.is_authenticated and perms.catalog.delete_author %}
+        <a href="{% url 'catalog:author_delete' author.pk %}"><img src="https://img.icons8.com/material-sharp/24/000000/filled-trash.png"/></a>
+    {% endif %}
+          </li>
   {% endfor %}
 
  </ul>
