@@ -111,4 +111,29 @@ class AuthorUpdate(PermissionRequiredMixin, edit.UpdateView):
 
 class AuthorDelete(PermissionRequiredMixin, edit.DeleteView):
     model = models.Author
-    success_url = reverse_lazy('authors')
+    success_url = reverse_lazy('catalog:authors-list')
+    permission_required = 'catalog.delete_author'
+
+
+class BookCreate(PermissionRequiredMixin, edit.CreateView):
+    model = models.Book
+    fields = '__all__'
+    initial = {
+        'summary': 'summary === Lorem ipsum dolor sit amet.',
+        'imprint': 'imprint === Lorem ipsum dolor sit amet.',
+        'language': 'eng',
+    }
+    permission_required = 'catalog.add_book'
+
+
+class BookUpdate(PermissionRequiredMixin, edit.UpdateView):
+    model = models.Book
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    permission_required = 'catalog.change_book'
+
+
+class BookDelete(PermissionRequiredMixin, edit.DeleteView):
+    model = models.Book
+    success_url = reverse_lazy('catalog:books-list')
+    permission_required = 'catalog.delete_book'
+
