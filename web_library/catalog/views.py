@@ -120,11 +120,13 @@ class AuthorCreate(PermissionRequiredMixin, edit.CreateView):
     model = models.Author
     fields = '__all__'
     initial = {'date_of_death': '01/01/2021', }
+    permission_required = 'catalog.add_author'
 
 
 class AuthorUpdate(PermissionRequiredMixin, edit.UpdateView):
     model = models.Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    permission_required = 'catalog.change_author'
 
 
 class AuthorDelete(PermissionRequiredMixin, edit.DeleteView):
