@@ -25,9 +25,8 @@ def index(request):
                  'num_visits': num_visits},
     )
 
+
 # ________________________________________________________________________
-
-
 from django.views import generic
 
 
@@ -109,34 +108,27 @@ import datetime
 #     return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
 
 
-@permission_required('catalog.can_mark_returned')
-def renew_book_librarian(request, pk):
-    """
-    View function for renewing a specific BookInstance by librarian
-    """
-    book_inst = get_object_or_404(models.BookInstance, pk=pk)
+# ________________________________________________________________________
+from django.views.generic import edit
+from . import forms
 
-    # If this is a POST request then process the Form data
-    if request.method == 'POST':
 
-        # Create a form instance and populate it with data from the request (binding):
-        form = RenewBookForm(request.POST)
+class RenewBookLibrarian(PermissionRequiredMixin, edit.UpdateView):
+    form_class = forms.RenewBookModelForm
+    initial = {'key': 'value'}
+    template_name = r'catalog\book_renew_librarian.html'
 
-        # Check if the form is valid:
+    def get(self, request):
+        form = self.form_class(self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
         if form.is_valid():
-            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
-            book_inst.due_back = form.cleaned_data['renewal_date']
-            book_inst.save()
+            form.save()
+            return reverse('all-borrowed')
 
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('all-borrowed') )
-
-    # If this is a GET (or any other method) create the default form.
-    else:
-        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date, })
-
-    return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
+        return render(request, self.template_name, {'form': form})
 
 
 # ________________________________________________________________________
