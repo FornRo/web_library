@@ -149,7 +149,6 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 STATICFILES_DIRS = ((PROJECT_ROOT / 'static'),)
 
-ALLOWED_HOSTS = ['herokudjangoapp.herokuapp.com']
 
 import dj_database_url
 prod_db = dj_database_url.config(conn_max_age=500)
