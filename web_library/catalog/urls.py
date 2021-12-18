@@ -10,9 +10,9 @@ urlpatterns += [
     re_path(r'^books/$', views.BookListView.as_view(), name='books-list'),
     path('book/<int:pk>', views.BookDetailView.as_view(), name='book-detail'),
 
-    re_path(r'^books/create/$', views.AuthorCreate.as_view(), name='books_create'),
-    re_path(r'^books/(?P<pk>\d+)/update/$', views.AuthorUpdate.as_view(), name='books_update'),
-    re_path(r'^books/(?P<pk>\d+)/delete/$', views.AuthorDelete.as_view(), name='books_delete'),
+    re_path(r'^books/create/$', views.BookCreate.as_view(), name='books_create'),
+    re_path(r'^books/(?P<pk>\d+)/update/$', views.BookUpdate.as_view(), name='books_update'),
+    re_path(r'^books/(?P<pk>\d+)/delete/$', views.BookDelete.as_view(), name='books_delete'),
 ]
 
 urlpatterns += [
