@@ -99,7 +99,7 @@ from django.urls import reverse_lazy
 class AuthorCreate(PermissionRequiredMixin, edit.CreateView):
     model = models.Author
     fields = '__all__'
-    initial = {'date_of_death': '01/01/2021', }
+    initial = {'date_of_death': '', }
     permission_required = 'catalog.add_author'
 
 
