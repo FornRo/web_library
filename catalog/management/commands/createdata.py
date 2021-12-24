@@ -1,8 +1,12 @@
+import random
+
 import faker.providers
+import faker.proxy
 from django.core.management.base import BaseCommand
 from faker import Faker
 from catalog import models
 import json
+import datetime
 
 
 class Provider(faker.providers.BaseProvider):
@@ -11,19 +15,24 @@ class Provider(faker.providers.BaseProvider):
         return self.random_element([1, 2, 3, 4, 5])
 
 
+
+# ------------------------------------------------------------
 class Command(BaseCommand):
     help = "Comand information"
 
+    def __init__(self):
+        super().__init__()
+        self.fake = Faker(['en'])
+        # self.fake.add_provider(Provider)
+
     def handle(self, *args, **options):
-        fake = Faker(['en'])
-        fake.add_provider(Provider)
+        self.fake.add_provider(Provider)
 
         self.generate_language()
         self.generate_genre()
-
-
-
-        # print(fake.name())
+        self.generate_author()
+        # self.generate_book()
+        # self.generate_book_instance()
 
     def generate_language(self):
         # iter all language
