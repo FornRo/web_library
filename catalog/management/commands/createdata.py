@@ -46,10 +46,7 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f'Generate of Language`s {check_genre}'))
 
     def generate_genre(self):
-        check_genre = models.Genre.objects.all().count()
-        self.stdout.write(self.style.SUCCESS(f'Number of genre {check_genre}'))
-
-        # iter all genre_for_books
+        # iter all genre_for_books len 24
         genre_ = [
             # List of fiction book genres:
             'Adventure',
