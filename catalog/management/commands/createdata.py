@@ -37,11 +37,13 @@ class Command(BaseCommand):
     def generate_language(self):
         # iter all language
         language_ = ["en", "ru", "uk", ]
-        for val in iter(language_):
-            models.Language.objects.create(name=val)
-        else:
-            check_genre = models.Language.objects.all().count()
-            self.stdout.write(self.style.SUCCESS(f'Number of Language {check_genre}'))
+
+        if models.Language.objects.all().count() == 0:
+            for val in iter(language_):
+                models.Language.objects.create(name=val)
+            else:
+                check_genre = models.Language.objects.all().count()
+                self.stdout.write(self.style.SUCCESS(f'Generate of Language`s {check_genre}'))
 
     def generate_genre(self):
         check_genre = models.Genre.objects.all().count()
