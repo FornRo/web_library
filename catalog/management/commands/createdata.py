@@ -14,6 +14,16 @@ class Provider(faker.providers.BaseProvider):
     def get_random_element_(self):
         return self.random_element([1, 2, 3, 4, 5])
 
+    def get_due_back_for_book_instance(self, date_end_day):
+        # generete some (datetime.now) + (31 days)
+        now = datetime.datetime.now()
+        some_days = datetime.timedelta(random.randint(1, date_end_day))
+        in_some_days = now + some_days
+        return Faker(['en']).date_between_dates(date_start=datetime.date.today(), date_end=in_some_days)
+
+    def get_some_user_of_django(self):
+        from django.contrib.auth.models import User
+        return random.choice([val.id for val in User.objects.all()])
 
 
 # ------------------------------------------------------------
