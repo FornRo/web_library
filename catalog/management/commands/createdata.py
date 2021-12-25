@@ -1,11 +1,13 @@
-import random
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
 
 import faker.providers
 import faker.proxy
-from django.core.management.base import BaseCommand
 from faker import Faker
+
 from catalog import models
-import json
+
+import random
 import datetime
 
 
