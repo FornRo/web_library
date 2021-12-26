@@ -127,7 +127,7 @@ class Command(BaseCommand):
         if models.Book.objects.count() == 0:
             for _ in range(15):
                 book = models.Book(
-                    title=self.fake.text(max_nb_chars=200),
+                    title=self.fake.text(max_nb_chars=75),  # but can max_nb_chars=200
                     author=self.fake.random_objects_author(),
                     summary=self.fake.text(max_nb_chars=1000),
                     imprint=self.fake.text(max_nb_chars=120),
