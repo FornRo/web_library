@@ -32,7 +32,7 @@ from django.views import generic
 
 class BookListView(generic.ListView):
     model = models.Book
-    # paginate_by = 4
+    paginate_by = 4
     template_name = 'catalog/book_list.html'
 
 
