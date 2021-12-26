@@ -50,6 +50,7 @@ class AuthorDetailView(generic.DetailView):
     model = models.Author
 
 
+# ________________________________________________________________________
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
