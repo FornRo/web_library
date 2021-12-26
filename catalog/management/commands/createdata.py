@@ -23,9 +23,25 @@ class Provider(faker.providers.BaseProvider):
         in_some_days = now + some_days
         return Faker(['en']).date_between_dates(date_start=datetime.date.today(), date_end=in_some_days)
 
-    def get_some_user_of_django(self):
-        from django.contrib.auth.models import User
-        return random.choice([val.id for val in User.objects.all()])
+    def random_objects_language(self):
+        chose_language_id = random.choice([val.id for val in models.Language.objects.all()])
+        return models.Language.objects.get(id=chose_language_id)
+
+    def random_objects_genre(self):
+        chose_genre_id = random.choice([val.id for val in models.Genre.objects.all()])
+        return models.Genre.objects.get(id=chose_genre_id)
+
+    def random_objects_author(self):
+        chose_author_id = random.choice([val.id for val in models.Author.objects.all()])
+        return models.Author.objects.get(id=chose_author_id)
+
+    def random_objects_book(self):
+        chose_book_id = random.choice([val.id for val in models.Book.objects.all()])
+        return models.Book.objects.get(id=chose_book_id)
+
+    def random_objects_user(self):
+        chose_id = random.choice([val.id for val in User.objects.all()])
+        return models.User.objects.get(id=chose_id)
 
 
 # ------------------------------------------------------------
@@ -43,15 +59,15 @@ class Command(BaseCommand):
         self.generate_language()
         self.generate_genre()
         self.generate_author()
-        # self.generate_book()
-        # self.generate_book_instance()
+        self.generate_book()
+        self.generate_book_instance()
 
     def generate_language(self):
         # iter all language
         language_ = ["en", "ru", "uk", ]
 
         if models.Language.objects.all().count() == 0:
-            for val in iter(language_):
+            for val in language_:
                 models.Language.objects.create(name=val)
             else:
                 check_genre = models.Language.objects.all().count()
@@ -88,7 +104,7 @@ class Command(BaseCommand):
             'Humor',
         ]
         if models.Genre.objects.count() == 0:
-            for val in iter(genre_):
+            for val in genre_:
                 models.Genre.objects.create(name=val)
             else:
                 check_genre = models.Genre.objects.all().count()
@@ -97,13 +113,11 @@ class Command(BaseCommand):
     def generate_author(self):
         if models.Author.objects.count() == 0:
             for _ in range(8):
-                first_name = self.fake.first_name()
-                last_name = self.fake.last_name()
-                date_of_birth = self.fake.date_of_birth()
-                date_of_death = random.choice([None, self.fake.get_due_back_for_book_instance(date_end_day=32)])
-
                 models.Author.objects.create(
-                    first_name=first_name, last_name=last_name, date_of_birth=date_of_birth, date_of_death=date_of_death
+                    first_name=self.fake.first_name(),
+                    last_name=self.fake.last_name(),
+                    date_of_birth=self.fake.date_of_birth(),
+                    date_of_death=random.choice([None, self.fake.get_due_back_for_book_instance(date_end_day=32)])
                 )
             else:
                 check_author = models.Author.objects.all().count()
@@ -112,25 +126,16 @@ class Command(BaseCommand):
     def generate_book(self):
         if models.Book.objects.count() == 0:
             for _ in range(15):
-                title = self.fake.text(max_nb_chars=200)
-
-                get_all_id_author = [val.id for val in models.Author.objects.all()]
-                author_id = models.Author(id=random.choice(get_all_id_author))
-
-                summary = self.fake.text(max_nb_chars=1000)
-                imprint = self.fake.text(max_nb_chars=120)
-                isbn = ''.join(self.fake.isbn13().split('-'))
-
-                get_all_id_genre = [val.id for val in models.Author.objects.all()]
-                genre_id = models.Genre(id=random.choice(get_all_id_genre))
-
-                get_all_id_language = [val.id for val in models.Language.objects.all()]
-                language_id = models.Language(id=random.choice(get_all_id_language))
-
-                models.Book.objects.create(
-                    title=title, author=author_id, summary=summary, imprint=imprint, isbn=isbn,
-                    genre=genre_id, language=language_id
+                book = models.Book(
+                    title=self.fake.text(max_nb_chars=200),
+                    author=self.fake.random_objects_author(),
+                    summary=self.fake.text(max_nb_chars=1000),
+                    imprint=self.fake.text(max_nb_chars=120),
+                    isbn=''.join(self.fake.isbn13().split('-')),
+                    language=self.fake.random_objects_language()
                 )
+                book.save()
+                book.genre.add(self.fake.random_objects_genre())
             else:
                 check_book = models.Book.objects.all().count()
                 self.stdout.write(self.style.SUCCESS(f'Generate of Books {check_book}'))
@@ -138,18 +143,12 @@ class Command(BaseCommand):
     def generate_book_instance(self):
         if models.BookInstance.objects.count() == 0:
             for _ in range(20):
-                get_all_id_book = [val.id for val in models.Book.objects.all()]
-                book_id = random.choice(get_all_id_book)
-                imprint = self.fake.text(max_nb_chars=200)
-
-                due_back = self.fake.get_due_back_for_book_instance(date_end_day=32)
-
-                borrower = self.fake.get_some_user_of_django()
-
-                status = random.choice([val[0] for val in models.BookInstance.LOAN_STATUS])
-
                 models.BookInstance.objects.create(
-                    book=book_id, imprint=imprint, due_back=due_back, borrower=borrower, status=status,
+                    book=self.fake.random_objects_book(),
+                    imprint=self.fake.text(max_nb_chars=200),
+                    due_back=self.fake.get_due_back_for_book_instance(date_end_day=32),
+                    borrower=self.fake.random_objects_user(),
+                    status=random.choice([val[0] for val in models.BookInstance.LOAN_STATUS])
                 )
             else:
                 check_book_instance = models.BookInstance.objects.all().count()
